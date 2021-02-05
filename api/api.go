@@ -19,8 +19,10 @@ const (
 	productionServer = "api.betradar.com"
 )
 
+// RequestTimeout timeout for an API call
 var RequestTimeout = 32 * time.Second
 
+// API for communication with BetRadar API
 type API struct {
 	server  string
 	token   string
@@ -67,6 +69,7 @@ const (
 	ping         = "/v1/users/whoami.xml"
 )
 
+// RequestRecovery from a timestamp
 func (a *API) RequestRecovery(producer uof.Producer, timestamp int, requestID int) error {
 	if timestamp <= 0 {
 		return a.RequestFullOddsRecovery(producer, requestID)
@@ -99,6 +102,7 @@ func (a *API) RequestFullOddsRecovery(producer uof.Producer, requestID int) erro
 // 	return a.post(fmt.Sprintf("/v1/%s/stateful_messages/events/%s/initiate_request", product, eventID))
 // }
 
+// Ping server
 func (a *API) Ping() error {
 	_, err := a.get(ping, nil)
 	return err

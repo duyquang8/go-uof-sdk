@@ -99,6 +99,15 @@ func testFixture(t *testing.T, a *API) {
 	assert.NotEqual(t, -1, bytes.Index(f, []byte("IK Oddevold")))
 }
 
+func testFixtureSummary(t *testing.T, a *API) {
+	lang := uof.LangEN
+	f, err := a.Fixture(lang, "sr:match:8696826")
+	assert.NoError(t, err)
+	assert.NotEqual(t, 0, len(f))
+	assert.NotEqual(t, -1, bytes.Index(f, []byte("sr:match:8696826")))
+	assert.NotEqual(t, -1, bytes.Index(f, []byte("IK Oddevold")))
+}
+
 func testPlayer(t *testing.T, a *API) {
 	lang := uof.LangEN
 	p, err := a.Player(lang, 947)

@@ -8,12 +8,13 @@ import (
 )
 
 const (
-	pathMarkets       = "/v1/descriptions/{{.Lang}}/markets.xml?include_mappings={{.IncludeMappings}}"
-	pathMarketVariant = "/v1/descriptions/{{.Lang}}/markets/{{.MarketID}}/variants/{{.Variant}}?include_mappings={{.IncludeMappings}}"
-	pathFixture       = "/v1/sports/{{.Lang}}/sport_events/{{.EventURN}}/fixture.xml"
-	pathPlayer        = "/v1/sports/{{.Lang}}/players/sr:player:{{.PlayerID}}/profile.xml"
-	events            = "/v1/sports/{{.Lang}}/schedules/pre/schedule.xml?start={{.Start}}&limit={{.Limit}}"
-	liveEvents        = "/v1/sports/{{.Lang}}/schedules/live/schedule.xml"
+	pathMarkets        = "/v1/descriptions/{{.Lang}}/markets.xml?include_mappings={{.IncludeMappings}}"
+	pathMarketVariant  = "/v1/descriptions/{{.Lang}}/markets/{{.MarketID}}/variants/{{.Variant}}?include_mappings={{.IncludeMappings}}"
+	pathFixture        = "/v1/sports/{{.Lang}}/sport_events/{{.EventURN}}/fixture.xml"
+	pathFixtureSummary = "/v1/sports/{{.Lang}}/sport_events/{{.EventURN}}/summary.xml"
+	pathPlayer         = "/v1/sports/{{.Lang}}/players/sr:player:{{.PlayerID}}/profile.xml"
+	events             = "/v1/sports/{{.Lang}}/schedules/pre/schedule.xml?start={{.Start}}&limit={{.Limit}}"
+	liveEvents         = "/v1/sports/{{.Lang}}/schedules/live/schedule.xml"
 )
 
 // Markets all currently available markets for a language
@@ -22,6 +23,7 @@ func (a *API) Markets(lang uof.Lang) (uof.MarketDescriptions, error) {
 	return mr.Markets, a.getAs(&mr, pathMarkets, &params{Lang: lang})
 }
 
+// MarketVariant returns market descriptions
 func (a *API) MarketVariant(lang uof.Lang, marketID int, variant string) (uof.MarketDescriptions, error) {
 	var mr marketsRsp
 	return mr.Markets, a.getAs(&mr, pathMarketVariant, &params{Lang: lang, MarketID: marketID, Variant: variant})
@@ -36,6 +38,16 @@ func (a *API) Fixture(lang uof.Lang, eventURN uof.URN) ([]byte, error) {
 	return buf, err
 }
 
+// FixtureSummary returns summary(static information and scores) for a fixture
+func (a *API) FixtureSummary(lang uof.Lang, eventURN uof.URN) ([]byte, error) {
+	buf, err := a.get(pathFixtureSummary, &params{Lang: lang, EventURN: eventURN})
+	if err != nil {
+		return nil, err
+	}
+	return buf, err
+}
+
+// Player returns player information
 func (a *API) Player(lang uof.Lang, playerID int) (*uof.Player, error) {
 	var pr playerRsp
 	return &pr.Player, a.getAs(&pr, pathPlayer, &params{Lang: lang, PlayerID: playerID})
