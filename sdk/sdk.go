@@ -39,7 +39,7 @@ func Run(ctx context.Context, options ...Option) error {
 		return err
 	}
 	if c.Replay != nil {
-		rpl, err := api.Replay(ctx, c.Token)
+		rpl, err := api.Replay(ctx, c.Token, false)
 		if err != nil {
 			return err
 		}
