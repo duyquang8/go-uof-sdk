@@ -42,6 +42,7 @@ func TestIntegration(t *testing.T) {
 		{"fixture", testFixture},
 		{"player", testPlayer},
 		{"fixtures", testFixtures},
+		{"fixturesSummary", testFixtureSummary},
 	}
 	for _, s := range tests {
 		t.Run(s.name, func(t *testing.T) { s.f(t, a) })
