@@ -10,8 +10,8 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/badboyd/go-uof-sdk"
 	"github.com/hashicorp/go-retryablehttp"
-	"github.com/minus5/go-uof-sdk"
 )
 
 const (
