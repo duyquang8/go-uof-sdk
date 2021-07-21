@@ -17,17 +17,17 @@ const (
 
 // Replay service for unified feed methods
 // set prod to true to run it on production, default will be run on staging
-func Replay(exitSig context.Context, token string, prod bool) (*ReplayAPI, error) {
+func Replay(exitSig context.Context, token string, stag bool) (*ReplayAPI, error) {
 	r := &ReplayAPI{
 		api: &API{
-			server:  stagingServer,
+			server:  productionServer,
 			token:   token,
 			exitSig: exitSig,
 		},
 	}
 
-	if prod {
-		r.api.server = productionServer
+	if stag {
+		r.api.server = stagingServer
 	}
 
 	return r, r.Reset()

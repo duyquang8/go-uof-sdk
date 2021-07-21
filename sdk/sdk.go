@@ -45,8 +45,9 @@ func Run(ctx context.Context, options ...Option) error {
 	if err != nil {
 		return err
 	}
+
 	if c.Replay != nil {
-		rpl, err := api.Replay(ctx, c.Token, false)
+		rpl, err := api.Replay(ctx, c.Token, c.Staging)
 		if err != nil {
 			return err
 		}

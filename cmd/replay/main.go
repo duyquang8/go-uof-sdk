@@ -88,6 +88,7 @@ func main() {
 		sdk.Languages(uof.Languages("en,de,hr")),
 		sdk.BufferedConsumer(pipe.FileStore(outputFolder), 1024),
 		sdk.Callback(progress),
+		sdk.Staging(),
 		sdk.Replay(startReplay),
 	)
 	if err != nil {
