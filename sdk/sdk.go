@@ -4,26 +4,31 @@ import (
 	"context"
 	"time"
 
-	"github.com/minus5/go-uof-sdk"
-	"github.com/minus5/go-uof-sdk/api"
-	"github.com/minus5/go-uof-sdk/pipe"
-	"github.com/minus5/go-uof-sdk/queue"
+	"github.com/badboyd/go-uof-sdk"
+	"github.com/badboyd/go-uof-sdk/api"
+	"github.com/badboyd/go-uof-sdk/pipe"
+	"github.com/badboyd/go-uof-sdk/queue"
 )
 
-var defaultLanuages = uof.Languages("en,de")
+var defaultLanguages = uof.Languages("en,de")
 
+// ErrorListenerFunc listens all SDK errors
+type ErrorListenerFunc func(err error)
+
+// Config is active SDK configuration
 type Config struct {
-	BookmakerID  string
-	Token        string
-	Fixtures     time.Time
-	Recovery     []uof.ProducerChange
-	Stages       []pipe.InnerStage
-	Replay       func(*api.ReplayAPI) error
-	Env          uof.Environment
-	Staging      bool
-	BindVirtuals bool
-	BindSports   bool
-	Languages    []uof.Lang
+	BookmakerID   string
+	Token         string
+	Fixtures      time.Time
+	Recovery      []uof.ProducerChange
+	Stages        []pipe.InnerStage
+	Replay        func(*api.ReplayAPI) error
+	Env           uof.Environment
+	Staging       bool
+	BindVirtuals  bool
+	BindSports    bool
+	Languages     []uof.Lang
+	ErrorListener ErrorListenerFunc
 }
 
 // Option sets attributes on the Config.
@@ -41,7 +46,7 @@ func Run(ctx context.Context, options ...Option) error {
 		return err
 	}
 	if c.Replay != nil {
-		rpl, err := api.Replay(ctx, c.Token)
+		rpl, err := api.Replay(ctx, c.Token, false)
 		if err != nil {
 			return err
 		}
@@ -66,14 +71,17 @@ func Run(ctx context.Context, options ...Option) error {
 		queue.WithReconnect(ctx, qc),
 		stages...,
 	)
-	return firstErr(errc)
+	return firstErr(errc, c.ErrorListener)
 }
 
-func firstErr(errc <-chan error) error {
+func firstErr(errc <-chan error, errorListener ErrorListenerFunc) error {
 	var err error
 	for e := range errc {
 		if err == nil {
 			err = e
+		}
+		if errorListener != nil {
+			errorListener(e)
 		}
 	}
 	return err
@@ -82,7 +90,7 @@ func firstErr(errc <-chan error) error {
 func config(options ...Option) Config {
 	// defaults
 	c := &Config{
-		Languages: defaultLanuages,
+		Languages: defaultLanguages,
 		Env:       uof.Production,
 	}
 	for _, o := range options {
@@ -214,5 +222,12 @@ func Recovery(pc []uof.ProducerChange) Option {
 func Fixtures(to time.Time) Option {
 	return func(c *Config) {
 		c.Fixtures = to
+	}
+}
+
+// ListenErrors sets ErrorListener for all SDK errors
+func ListenErrors(listener ErrorListenerFunc) Option {
+	return func(c *Config) {
+		c.ErrorListener = listener
 	}
 }

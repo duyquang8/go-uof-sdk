@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/minus5/go-uof-sdk"
+	"github.com/badboyd/go-uof-sdk"
 	"github.com/stretchr/testify/assert"
 )
 

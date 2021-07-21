@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/badboyd/go-uof-sdk"
 	"github.com/cenkalti/backoff/v3"
-	"github.com/minus5/go-uof-sdk"
 	"github.com/pkg/errors"
 )
 

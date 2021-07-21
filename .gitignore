@@ -15,3 +15,5 @@ coverage.html
 .vscode
 .idea
 todo
+.DS*
+

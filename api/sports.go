@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"time"
 
-	"github.com/minus5/go-uof-sdk"
+	"github.com/badboyd/go-uof-sdk"
 )
 
 const (
@@ -24,6 +24,7 @@ func (a *API) Markets(lang uof.Lang) (uof.MarketDescriptions, error) {
 	return mr.Markets, a.getAs(&mr, pathMarkets, &params{Lang: lang})
 }
 
+// MarketVariant returns market descriptions
 func (a *API) MarketVariant(lang uof.Lang, marketID int, variant string) (uof.MarketDescriptions, error) {
 	var mr marketsRsp
 	return mr.Markets, a.getAs(&mr, pathMarketVariant, &params{Lang: lang, MarketID: marketID, Variant: variant})
@@ -46,6 +47,7 @@ func (a *API) Tournament(lang uof.Lang, eventURN uof.URN) (*uof.FixtureTournamen
 	return &ft, a.getAs(&ft, pathFixture, &params{Lang: lang, EventURN: eventURN})
 }
 
+// Player returns player information
 func (a *API) Player(lang uof.Lang, playerID int) (*uof.Player, error) {
 	var pr playerRsp
 	return &pr.Player, a.getAs(&pr, pathPlayer, &params{Lang: lang, PlayerID: playerID})

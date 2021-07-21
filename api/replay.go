@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 
-	"github.com/minus5/go-uof-sdk"
+	"github.com/badboyd/go-uof-sdk"
 )
 
 // replay api paths
@@ -16,22 +16,29 @@ const (
 )
 
 // Replay service for unified feed methods
-func Replay(exitSig context.Context, token string) (*ReplayAPI, error) {
+// set prod to true to run it on production, default will be run on staging
+func Replay(exitSig context.Context, token string, prod bool) (*ReplayAPI, error) {
 	r := &ReplayAPI{
 		api: &API{
-			server:  productionServer,
+			server:  stagingServer,
 			token:   token,
 			exitSig: exitSig,
 		},
 	}
+
+	if prod {
+		r.api.server = productionServer
+	}
+
 	return r, r.Reset()
 }
 
+// ReplayAPI for communicating to Replay server
 type ReplayAPI struct {
 	api *API
 }
 
-// Start replay of the scenario from replay queue. Your current playlist will be
+// StartScenario replay of the scenario from replay queue. Your current playlist will be
 // wiped, and populated with events from specified scenario. Events are played
 // in the order they were played in reality. Parameters 'speed' and 'max_delay'
 // specify the speed of replay and what should be the maximum delay between
@@ -56,12 +63,12 @@ func (r *ReplayAPI) StartEvent(eventURN uof.URN, speed, maxDelay int) error {
 	return r.Play(speed, maxDelay)
 }
 
-// Adds to the end of the replay queue.
+// Add to the end of the replay queue.
 func (r *ReplayAPI) Add(eventURN uof.URN) error {
 	return r.api.put(replayAdd, &params{EventURN: eventURN})
 }
 
-// Start replay the events from replay queue. Events are played in the order
+// Play replay the events from replay queue. Events are played in the order
 // they were played in reality. Parameters 'speed' and 'max_delay' specify the
 // speed of replay and what should be the maximum delay between messages.
 // Default values for these are speed = 10 and max_delay = 10000. This means
@@ -80,7 +87,7 @@ func (r *ReplayAPI) Stop() error {
 	return r.api.post(replayStop, nil)
 }
 
-// Stop the player if it is currently playing and clear the replay queue. If
+// Reset the player if it is currently playing and clear the replay queue. If
 // player is already stopped, the queue is cleared.
 func (r *ReplayAPI) Reset() error {
 	return r.api.post(replayReset, nil)
