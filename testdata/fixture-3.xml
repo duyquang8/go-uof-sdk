@@ -1,48 +1,48 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<fixtures_fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" generated_at="2019-12-11T11:37:35+00:00" xmlns="http://schemas.sportradar.com/sportsapi/v1/unified" xsi:schemaLocation="http://schemas.sportradar.com/sportsapi/v1/unified http://schemas.sportradar.com/bsa-staging/unified/v1/xml/endpoints/unified/fixtures_fixture.xsd">
-<fixture id="sr:match:13616027" scheduled="2018-01-23T09:30:00+00:00" start_time_tbd="false" status="closed" next_live_time="2018-01-23T09:40:00+00:00" liveodds="not_available" start_time="2018-01-23T09:30:00+00:00" start_time_confirmed="true">
-    <tournament_round type="cup" name="round_of_16" betradar_id="67168"/>
-	<!-- this is for test when fixture is without tournament, causes SDK to fail with panic if unhandled
-    <tournament id="sr:tournament:15812" name="ITF Egypt F2, Men Doubles">
-        <sport id="sr:sport:5" name="Tennis"/>
-        <category id="sr:category:785" name="ITF Men"/>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tournament_info generated_at="2020-03-21T07:49:35.459Z" 
+    xmlns="http://schemas.sportradar.com/sportsapi/v1/unified">
+    <tournament id="vf:tournament:13933" name="Virtual Football Nations Cup">
+        <sport id="sr:sport:1" name="Soccer"/>
+        <category id="sr:category:1111" name="Virtual Football"/>
+        <current_season start_date="2020-03-21Z" end_date="2020-03-21Z" start_time="07:33:15.000Z" end_time="08:28:25.000Z" year="33832" id="vf:season:701457" name="VFNC 33832"/>
     </tournament>
-	-->
-    <competitors>
-        <competitor id="sr:competitor:328169" name="Hossam Y / Taweel I H" abbreviation="HOS" qualifier="home" gender="male">
-            <reference_ids>
-                <reference_id name="betradar" value="9635713"/>
-            </reference_ids>
-            <players>
-                <player id="sr:competitor:53491" name="Taweel, Issam Haitham" abbreviation="TIH" nationality="Egypt"/>
-                <player id="sr:competitor:110109" name="Hossam, Youssef" abbreviation="HOS" nationality="Egypt"/>
-            </players>
-        </competitor>
-        <competitor id="sr:competitor:406755" name="Goldhoff G / Gornet A" abbreviation="GOL" qualifier="away" gender="male">
-            <reference_ids>
-                <reference_id name="betradar" value="10502911"/>
-            </reference_ids>
-            <players>
-                <player id="sr:competitor:92845" name="Goldhoff, George" abbreviation="GOL" nationality="USA"/>
-                <player id="sr:competitor:167212" name="Gornet, Alexander" abbreviation="GOR" nationality="USA"/>
-            </players>
-        </competitor>
-    </competitors>
-    <extra_info>
-        <info key="neutral_ground" value="true"/>
-        <info key="best_of" value="3"/>
-        <info key="super_tiebreak" value="10"/>
-        <info key="surface" value="hardcourt_outdoor"/>
-        <info key="coverage_source" value="venue"/>
-        <info key="extended_live_markets_offered" value="false"/>
-        <info key="auto_traded" value="true"/>
-    </extra_info>
-    <product_info>
-        <is_in_hosted_statistics/>
-        <is_auto_traded/>
-    </product_info>
-    <reference_ids>
-        <reference_id name="BetradarCtrl" value="14523029"/>
-    </reference_ids>
-</fixture>
-</fixtures_fixture>
+    <season start_date="2020-03-21Z" end_date="2020-03-21Z" start_time="07:33:15.000Z" end_time="08:28:25.000Z" year="33832" tournament_id="vf:tournament:13933" id="vf:season:701457" name="VFNC 33832"/>
+    <groups>
+        <group name="A">
+            <competitor id="sr:competitor:272001" name="Mexico" abbreviation="MEX"/>
+            <competitor id="sr:competitor:272002" name="Costa Rica" abbreviation="CRC"/>
+            <competitor id="sr:competitor:272003" name="Jamaica" abbreviation="JAM"/>
+            <competitor id="sr:competitor:272004" name="USA" abbreviation="USA"/>
+        </group>
+        <group name="B">
+            <competitor id="sr:competitor:272005" name="Spain" abbreviation="ESP"/>
+            <competitor id="sr:competitor:272006" name="Italy" abbreviation="ITA"/>
+            <competitor id="sr:competitor:272007" name="England" abbreviation="ENG"/>
+            <competitor id="sr:competitor:272008" name="Turkey" abbreviation="TUR"/>
+        </group>
+        <group name="C">
+            <competitor id="sr:competitor:272009" name="Germany" abbreviation="GER"/>
+            <competitor id="sr:competitor:272010" name="Ukraine" abbreviation="UKR"/>
+            <competitor id="sr:competitor:272011" name="Russia" abbreviation="RUS"/>
+            <competitor id="sr:competitor:272012" name="Georgia" abbreviation="GEO"/>
+        </group>
+        <group name="D">
+            <competitor id="sr:competitor:272013" name="Argentina" abbreviation="ARG"/>
+            <competitor id="sr:competitor:272014" name="Chile" abbreviation="CHI"/>
+            <competitor id="sr:competitor:272015" name="Uruguay" abbreviation="URU"/>
+            <competitor id="sr:competitor:272016" name="Brazil" abbreviation="BRA"/>
+        </group>
+        <group name="E">
+            <competitor id="sr:competitor:272017" name="Nigeria" abbreviation="NGR"/>
+            <competitor id="sr:competitor:272018" name="Ghana" abbreviation="GHA"/>
+            <competitor id="sr:competitor:272019" name="Senegal" abbreviation="SEN"/>
+            <competitor id="sr:competitor:272020" name="Côte d'Ivoire" abbreviation="CIV"/>
+        </group>
+        <group name="F">
+            <competitor id="sr:competitor:272021" name="Australia" abbreviation="AUS"/>
+            <competitor id="sr:competitor:272022" name="Korea Rep." abbreviation="KOR"/>
+            <competitor id="sr:competitor:272023" name="Japan" abbreviation="JPN"/>
+            <competitor id="sr:competitor:272024" name="China" abbreviation="CHN"/>
+        </group>
+    </groups>
+</tournament_info>

@@ -52,7 +52,22 @@ type Fixture struct {
 	//CoverageInfo CoverageInfo `xml:"coverage_info,omitempty" json:"coverageInfo,omitempty"`
 	//ScheduledStartTimeChanges []ScheduledStartTimeChange `xml:"scheduled_start_time_changes>scheduled_start_time_change,omitempty" json:"scheduledStartTimeChanges,omitempty"`
 	//Parent *ParentStage `xml:"parent,omitempty" json:"parent,omitempty"`
+}
 
+type FixtureTournament struct {
+	ID         int        `xml:"-" json:"id"`
+	URN        URN        `xml:"id,attr,omitempty" json:"urn"`
+	Name       string     `xml:"name,attr,omitempty" json:"name,omitempty"`
+	Sport      Sport      `xml:"sport" json:"sport"`
+	Category   Category   `xml:"category" json:"category"`
+	Tournament Tournament `xml:"tournament,omitempty" json:"tournament,omitempty"`
+	Season     Season     `xml:"season,omitempty" json:"season,omitempty"`
+	Groups     []Group    `xml:"groups>group,omitempty" json:"groups,omitempty"`
+}
+
+type Group struct {
+	Name        string       `xml:"name,attr,omitempty" json:"name"`
+	Competitors []Competitor `xml:"competitor,omitempty" json:"competitors,omitempty"`
 }
 
 type Tournament struct {
@@ -129,13 +144,13 @@ type Round struct {
 }
 
 type Season struct {
-	ID        int       `json:"id"`
-	StartDate string    `xml:"start_date,attr" json:"startDate"`
-	EndDate   string    `xml:"end_date,attr" json:"endDate"`
-	StartTime time.Time `xml:"start_time,attr,omitempty" json:"startTime,omitempty"`
-	EndTime   time.Time `xml:"end_time,attr,omitempty" json:"endTime,omitempty"`
-	Year      string    `xml:"year,attr,omitempty" json:"year,omitempty"`
-	Name      string    `xml:"name,attr" json:"name"`
+	ID        int    `json:"id"`
+	StartDate string `xml:"start_date,attr" json:"startDate"`
+	EndDate   string `xml:"end_date,attr" json:"endDate"`
+	StartTime string `xml:"start_time,attr,omitempty" json:"startTime,omitempty"`
+	EndTime   string `xml:"end_time,attr,omitempty" json:"endTime,omitempty"`
+	Year      string `xml:"year,attr,omitempty" json:"year,omitempty"`
+	Name      string `xml:"name,attr" json:"name"`
 	//TournamentID string    `xml:"tournament_id,attr,omitempty" json:"tournamentID,omitempty"`
 }
 
@@ -179,6 +194,21 @@ type SportEvent struct {
 	Type         string    `xml:"type,attr,omitempty" json:"type,omitempty"`
 	Scheduled    time.Time `xml:"scheduled,attr,omitempty" json:"scheduled,omitempty"`
 	ScheduledEnd time.Time `xml:"scheduled_end,attr,omitempty" json:"scheduled_end,omitempty"`
+}
+
+type Summary struct {
+	SportEvent         Fixture             `xml:"sport_event" json:"sportEvent"`
+	GeneratedAt        time.Time           `xml:"generated_at,attr,omitempty" json:"generatedAt,omitempty"`
+	SummaryEventStatus *SummaryEventStatus `xml:"sport_event_status,omitempty" json:"summaryEventStatus,omitempty"`
+}
+
+// slici na sport_event_status ali statusi nisu int nego string
+type SummaryEventStatus struct {
+	Status       string        `xml:"status,attr" json:"status"`
+	MatchStatus  string        `xml:"match_status,attr" json:"matchStatus"`
+	HomeScore    *int          `xml:"home_score,attr,omitempty" json:"homeScore,omitempty"`
+	AwayScore    *int          `xml:"away_score,attr,omitempty" json:"awayScore,omitempty"`
+	PeriodScores []PeriodScore `xml:"period_scores>period_score,omitempty" json:"periodScores,omitempty"`
 }
 
 func (f *Fixture) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -297,6 +327,32 @@ func (t *CompetitorPlayer) UnmarshalXML(d *xml.Decoder, start xml.StartElement) 
 		return err
 	}
 	t.ID = overlay.URN.ID()
+	return nil
+}
+
+func (t *FixtureTournament) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type T FixtureTournament
+	var overlay struct {
+		*T
+		Tournament *struct {
+			URN      URN      `xml:"id,attr"`
+			Name     string   `xml:"name,attr"`
+			Sport    Sport    `xml:"sport"`
+			Category Category `xml:"category"`
+		} `xml:"tournament,omitempty"`
+	}
+	overlay.T = (*T)(t)
+	if err := d.DecodeElement(&overlay, &start); err != nil {
+		return err
+	}
+	if overlay.Tournament != nil {
+		t.Sport = overlay.Tournament.Sport
+		t.Category = overlay.Tournament.Category
+		t.Tournament.ID = overlay.Tournament.URN.ID()
+		t.Tournament.Name = overlay.Tournament.Name
+		t.ID = overlay.Tournament.URN.ID()
+		t.URN = overlay.Tournament.URN
+	}
 	return nil
 }
 
