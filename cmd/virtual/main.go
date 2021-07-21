@@ -13,9 +13,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/minus5/go-uof-sdk"
-	"github.com/minus5/go-uof-sdk/pipe"
-	"github.com/minus5/go-uof-sdk/sdk"
+	"github.com/badboyd/go-uof-sdk"
+	"github.com/badboyd/go-uof-sdk/pipe"
+	"github.com/badboyd/go-uof-sdk/sdk"
 )
 
 const (
