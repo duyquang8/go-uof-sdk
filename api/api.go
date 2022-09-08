@@ -102,6 +102,21 @@ func (a *API) RequestFullOddsRecovery(producer uof.Producer, requestID int) erro
 // 	return a.post(fmt.Sprintf("/v1/%s/stateful_messages/events/%s/initiate_request", product, eventID))
 // }
 
+// GetBookmakerDetails returns BookmakerDetails include token's expire_time
+func (a *API) GetBookmakerDetails() (*BookmakerDetails, error) {
+	resp, err := a.get(ping, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	bookmakerDetails := BookmakerDetails{}
+	if err := xml.Unmarshal(resp, &bookmakerDetails); err != nil {
+		return nil, err
+	}
+
+	return &bookmakerDetails, err
+}
+
 // Ping server
 func (a *API) Ping() error {
 	_, err := a.get(ping, nil)
