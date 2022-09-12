@@ -161,10 +161,13 @@ const NoURN = URN("")
 // those with prefix sr:match for them we reserve positive id-s. All others got
 // range in negative ids.
 // Reference: https://docs.betradar.com/display/BD/MG+-+Entities
-//            http://sdk.sportradar.com/content/unifiedfeedsdk/net/doc/html/e1f73019-73cd-c9f8-0d58-7fe25800abf2.htm
+//
+//	http://sdk.sportradar.com/content/unifiedfeedsdk/net/doc/html/e1f73019-73cd-c9f8-0d58-7fe25800abf2.htm
+//
 // List of currently existing event types is taken from the combo box in the
 // integration control page. From method "Fixture for a specified sport event".
 // !!! Refactored to Producer + EventID in producer.
+//
 //nolint:gocyclo //accepting complexity of 23
 func (u URN) EventID() int {
 	id, prefix := u.split()
@@ -510,4 +513,5 @@ const (
 	Production Environment = iota
 	Staging
 	Replay
+	ProductionGlobal
 )

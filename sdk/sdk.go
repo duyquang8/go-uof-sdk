@@ -147,6 +147,13 @@ func Staging() Option {
 	}
 }
 
+// Global forces use of global production environment.
+func Global() Option {
+	return func(c *Config) {
+		c.Env = uof.ProductionGlobal
+	}
+}
+
 // BindVirtuals bind only to virtuals messages
 func BindVirtuals() Option {
 	return func(c *Config) {

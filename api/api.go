@@ -15,8 +15,9 @@ import (
 )
 
 const (
-	stagingServer    = "stgapi.betradar.com"
-	productionServer = "api.betradar.com"
+	stagingServer          = "stgapi.betradar.com"
+	productionServer       = "api.betradar.com"
+	productionServerGlobal = "global.api.betradar.com"
 )
 
 // RequestTimeout timeout for an API call
@@ -38,6 +39,8 @@ func Dial(ctx context.Context, env uof.Environment, token string) (*API, error) 
 		return Staging(ctx, token)
 	case uof.Production:
 		return Production(ctx, token)
+	case uof.ProductionGlobal:
+		return ProductionGlobal(ctx, token)
 	default:
 		return nil, uof.Notice("queue dial", fmt.Errorf("unknown environment %d", env))
 	}
@@ -57,6 +60,16 @@ func Staging(exitSig context.Context, token string) (*API, error) {
 func Production(exitSig context.Context, token string) (*API, error) {
 	a := &API{
 		server:  productionServer,
+		token:   token,
+		exitSig: exitSig,
+	}
+	return a, a.Ping()
+}
+
+// ProductionGlobal connects to the production global system
+func ProductionGlobal(exitSig context.Context, token string) (*API, error) {
+	a := &API{
+		server:  productionServerGlobal,
 		token:   token,
 		exitSig: exitSig,
 	}

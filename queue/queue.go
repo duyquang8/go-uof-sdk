@@ -15,11 +15,12 @@ import (
 )
 
 const (
-	replayServer     = "replaymq.betradar.com:5671"
-	stagingServer    = "stgmq.betradar.com:5671"
-	productionServer = "mq.betradar.com:5671"
-	queueExchange    = "unifiedfeed"
-	bindingKeyAll    = "#"
+	replayServer           = "replaymq.betradar.com:5671"
+	stagingServer          = "stgmq.betradar.com:5671"
+	productionServer       = "mq.betradar.com:5671"
+	globalProductionServer = "global.mq.betradar.com:5671"
+	queueExchange          = "unifiedfeed"
+	bindingKeyAll          = "#"
 	// Unless you are binding to all messages (“#”), you will typically bind to
 	// at least two routing key patterns (e.g. “*.*.live.#” and “-.-.-.#”)
 	// because you are typically always interested in receiving the system
@@ -45,6 +46,8 @@ func Dial(ctx context.Context, env uof.Environment, bookmakerID, token string, b
 		return DialStaging(ctx, bookmakerID, token, bind)
 	case uof.Production:
 		return DialProduction(ctx, bookmakerID, token, bind)
+	case uof.ProductionGlobal:
+		return DialProductionGlobal(ctx, bookmakerID, token, bind)
 	default:
 		return nil, uof.Notice("queue dial", fmt.Errorf("unknown environment %d", env))
 	}
@@ -53,6 +56,11 @@ func Dial(ctx context.Context, env uof.Environment, bookmakerID, token string, b
 // Dial connects to the production queue
 func DialProduction(ctx context.Context, bookmakerID, token string, bind int8) (*Connection, error) {
 	return dial(ctx, productionServer, bookmakerID, token, bind)
+}
+
+// DialProductionGlobal connects to the production global queue
+func DialProductionGlobal(ctx context.Context, bookmakerID, token string, bind int8) (*Connection, error) {
+	return dial(ctx, globalProductionServer, bookmakerID, token, bind)
 }
 
 // DialStaging connects to the staging queue
